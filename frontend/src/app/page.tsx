@@ -1,5 +1,8 @@
 import CategorySection from "@/components/home/CategorySection";
+import FeaturedProducts from "@/components/home/FeaturedProducts";
 import Hero from "@/components/home/Hero";
+import WhyShopSphere from "@/components/home/WhyShopSphere";
+import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
 import Image from "next/image";
 
@@ -11,9 +14,17 @@ export default function Home() {
       <main>
         <Hero />
         <CategorySection />
+        <FeaturedProducts />
+        <WhyShopSphere />
       </main>
 
-      {/* <main className="flex-1">
+      <Footer />
+    </>
+  );
+}
+
+
+{/* <main className="flex-1">
         <section className="mx-auto flex min-h-[70vh] max-w-7xl items-center px-4 sm:px-6 lg:px-8">
           <div>
             <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-accent">
@@ -43,6 +54,3 @@ export default function Home() {
           </div>
         </section>
       </main> */}
-    </>
-  );
-}

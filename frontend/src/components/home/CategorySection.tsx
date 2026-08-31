@@ -1,7 +1,6 @@
 import { categories } from "@/data/categories";
 import Link from "next/link";
 
-
 export default function CategorySection() {
     return (
         <section className="bg-white py-20 sm:py-24">
@@ -39,6 +38,7 @@ export default function CategorySection() {
                 <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
                     {categories.map((category) => (
                         <Link
+                            key={category.id}
                             href={`/categories/${category.id}`}
                             className="group relative overflow-hidden rounded-2xl border border-border bg-[#fafafa] p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#d8c9ff] hover:bg-[#f7f3ff] hover:shadow-lg sm:p-6"
                         >
