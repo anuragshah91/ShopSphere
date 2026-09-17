@@ -1,11 +1,25 @@
 import express from 'express';
+import cors from "cors";
 import { env } from './config/env';
+import connectDB from './config/db';
+import productRoutes from './routes/productRoutes';
 
 const app = express();
 
-// const PORT = 5000;
+app.use(express.json());
 
-app.get("/", (req,res) => {
+app.use(
+    cors({
+        origin: "http://localhost:3000",
+    })
+);
+
+connectDB();
+
+// Product Routes 
+app.use("/api/products", productRoutes);
+
+app.get("/", (_req,res) => {
     res.json({
         message: "ShopSphere Backend is running ",
     });

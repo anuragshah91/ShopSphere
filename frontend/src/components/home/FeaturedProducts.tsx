@@ -1,8 +1,97 @@
-import { products } from "@/data/products";
+"use client"
+// import { products } from "@/data/products";
 import Link from "next/link";
 import ProductCard from "../product/ProductCard";
+import { useEffect, useState } from "react";
+import { getProducts } from "@/lib/api";
+import { Product } from "@/types/product";
+
+// interface Product {
+//     _id: string;
+//     name: string;
+//     category: string;
+//     price: string;
+//     originalPrice?: number;
+//     rating: number;
+//     reviewsCount: number;
+//     image: string[];
+//     isFeatured: boolean;
+// }
 
 export default function FeaturedProducts() {
+    const [products, setProducts] = useState<Product[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const data = await getProducts();
+
+                const featuredProducts = data.filter(
+                    (products: Product) => products.isFeatured
+                );
+
+                setProducts(featuredProducts);
+
+            } catch (error) {
+                console.error("Filed to fetch poroducts:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchProducts();
+    }, []);
+
+//     useEffect(() => {
+//     const fetchProducts = async () => {
+//       try {
+//         const response = await fetch(
+//           "http://localhost:5000/api/products"
+//         );
+
+//         if (!response.ok) {
+//           throw new Error("Failed to fetch products");
+//         }
+
+//         const result = await response.json();
+
+//         const featuredProducts = result.data.filter(
+//           (product: Product) => product.isFeatured
+//         );
+
+//         setProducts(featuredProducts);
+//       } catch (error) {
+//         console.error("Failed to fetch products:", error);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchProducts();
+//   }, []);
+
+  if (loading) {
+    return (
+      <section className="py-20">
+        <div className="mx-auto max-w-7xl px-6">
+          <p className="text-center text-gray-500">
+            Loading products...
+          </p>
+        </div>
+      </section>
+    );
+  }
+
+    if (loading) {
+        return (
+            <section className="py-20">
+                <div className="mx-auto max-w-7xl px-6">
+                    <p className="text-center text-gray-500">Loading products...</p>
+                </div>
+            </section>
+        )
+    }
+
     return (
         <section className="bg-[#fafafa] py-20 sm:py-24">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -31,11 +120,11 @@ export default function FeaturedProducts() {
                         View all →
                     </Link>
                 </div>
-                
+
                 {/* Product Grid */}
                 <div className="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 lg:grid-cols-4">
                     {products.map((product) => (
-                        <ProductCard key={product.id} product={product} />
+                        <ProductCard key={product._id} product={product} />
                     ))}
                 </div>
             </div>

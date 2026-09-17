@@ -1,32 +1,30 @@
 "use client";
-
+import Link from "next/link";
+import Image from "next/image";
+import { Product } from "@/types/product";
 import { FiHeart, FiShoppingBag } from "react-icons/fi";
-
-type Product = {
-  id: string;
-  name: string;
-  category: string;
-  price: number;
-  originalPrice: number;
-  rating: number;
-  reviews: number;
-  badge: string;
-  icon: string;
-};
 
 type ProductCardProps = {
   product: Product;
 };
 
 export default function ProductCard({ product }: ProductCardProps) {
+
+  const image = product.images?.[0];
+
   return (
     <article className="group">
       {/* Product Image */}
       <div className="relative aspect-4/5 overflow-hidden rounded-2xl bg-[#f4f4f5]">
         {/* Badge */}
-        <div className="absolute left-4 top-4 z-10 rounded-full bg-white px-3 py-1.5 text-[11px] font-semibold text-foreground shadow-sm">
+        {/* <div className="absolute left-4 top-4 z-10 rounded-full bg-white px-3 py-1.5 text-[11px] font-semibold text-foreground shadow-sm">
           {product.badge}
-        </div>
+        </div> */}
+        {product.isFeatured && (
+          <div className="absolute left-4 top-4 z-10 rounded-full bg-white px-3 py-1.5 text-[11px] font-semibold text-foreground shadow-sm">
+            Featured
+          </div>
+        )}
 
         {/* Wishlist */}
         <button
@@ -38,10 +36,32 @@ export default function ProductCard({ product }: ProductCardProps) {
         </button>
 
         {/* Temporary visual */}
-        <div className="flex h-full items-center justify-center">
+        {/* <div className="flex h-full items-center justify-center">
           <div className="flex h-36 w-36 items-center justify-center rounded-full bg-white text-6xl shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-transform duration-500 group-hover:scale-110">
             {product.icon}
           </div>
+        </div> */}
+
+        {/* Product Image  */}
+        <div className="relative flex h-full items-center justify-center">
+          {image ? (
+            // <img
+            //   src={image}
+            //   alt={product.name}
+            //   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            // />
+            <Image
+              src={image}
+              alt={product.name}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          ) : (
+            <div className="flex h-36 w-36 items-center justify-center rounded-full bg-white text-red-500 text-2xl shadow-[0_20px_50px_rgba(0,0,0,0.08)]">
+              No Image
+            </div>
+          )}
         </div>
 
         {/* Add to cart */}
@@ -60,9 +80,11 @@ export default function ProductCard({ product }: ProductCardProps) {
           {product.category}
         </p>
 
-        <h3 className="mt-1 text-sm font-semibold tracking-tight text-foreground sm:text-base">
-          {product.name}
-        </h3>
+        <Link href={`/products/${product.slug}`}>
+          <h3 className="mt-1 text-sm font-semibold tracking-tight text-foreground sm:text-base">
+            {product.name}
+          </h3>
+        </Link>
 
         {/* Rating */}
         <div className="mt-2 flex items-center gap-1.5">
@@ -73,7 +95,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </span>
 
           <span className="text-xs text-muted">
-            ({product.reviews})
+            ({product.reviewsCount})
           </span>
         </div>
 
@@ -83,9 +105,15 @@ export default function ProductCard({ product }: ProductCardProps) {
             ₹{product.price.toLocaleString("en-IN")}
           </span>
 
-          <span className="text-xs text-muted line-through">
+          {/* <span className="text-xs text-muted line-through">
             ₹{product.originalPrice.toLocaleString("en-IN")}
-          </span>
+          </span> */}
+
+          {product.originalPrice && (
+            <span className="text-xs text-muted line-through">
+              ₹{product.originalPrice.toLocaleString("en-IN")}
+            </span>
+          )}
         </div>
       </div>
     </article>
