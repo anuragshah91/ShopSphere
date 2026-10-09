@@ -4,7 +4,7 @@ import Link from "next/link";
 import ProductCard from "../product/ProductCard";
 import { useEffect, useState } from "react";
 import { getProducts } from "@/lib/api";
-import { Product } from "@/types/product";
+import type { Product } from "@/types/product";
 
 // interface Product {
 //     _id: string;
@@ -25,62 +25,21 @@ export default function FeaturedProducts() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const data = await getProducts();
-
-                const featuredProducts = data.filter(
-                    (products: Product) => products.isFeatured
+                const response = await getProducts();
+                const featuredProducts = response.data.filter(
+                    (product: Product) => product.isFeatured
                 );
 
                 setProducts(featuredProducts);
 
             } catch (error) {
-                console.error("Filed to fetch poroducts:", error);
+                console.error("Failed to fetch products:", error);
             } finally {
                 setLoading(false);
             }
         };
         fetchProducts();
     }, []);
-
-//     useEffect(() => {
-//     const fetchProducts = async () => {
-//       try {
-//         const response = await fetch(
-//           "http://localhost:5000/api/products"
-//         );
-
-//         if (!response.ok) {
-//           throw new Error("Failed to fetch products");
-//         }
-
-//         const result = await response.json();
-
-//         const featuredProducts = result.data.filter(
-//           (product: Product) => product.isFeatured
-//         );
-
-//         setProducts(featuredProducts);
-//       } catch (error) {
-//         console.error("Failed to fetch products:", error);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchProducts();
-//   }, []);
-
-  if (loading) {
-    return (
-      <section className="py-20">
-        <div className="mx-auto max-w-7xl px-6">
-          <p className="text-center text-gray-500">
-            Loading products...
-          </p>
-        </div>
-      </section>
-    );
-  }
 
     if (loading) {
         return (

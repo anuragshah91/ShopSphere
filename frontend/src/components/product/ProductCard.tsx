@@ -45,11 +45,6 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Product Image  */}
         <div className="relative flex h-full items-center justify-center">
           {image ? (
-            // <img
-            //   src={image}
-            //   alt={product.name}
-            //   className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-            // />
             <Image
               src={image}
               alt={product.name}

@@ -1,17 +1,66 @@
+import type { ProductFilters, ProductsResponse } from "@/types/product";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export const getProducts = async () => {
-    const response = await fetch(`${API_URL}/products`);
+// GET all products
+export const getProducts = async (
+    filters: ProductFilters = {}
+): Promise<ProductsResponse> => {
+    const params = new URLSearchParams();
+
+    if (filters.search) {
+        params.set("search", filters.search);
+    }
+
+    if (filters.category) {
+        params.set("category", filters.category);
+    }
+
+    if (filters.minPrice !== undefined) {
+        params.set("minPrice", String(filters.minPrice));
+    }
+
+    if (filters.maxPrice !== undefined) {
+        params.set("maxPrice", String(filters.maxPrice));
+    }
+
+    if (filters.sort) {
+        params.set("sort", filters.sort);
+    }
+
+    if (filters.page !== undefined) {
+        params.set("page", String(filters.page));
+    }
+
+    if (filters.limit !== undefined) {
+        params.set("limit", String(filters.limit));
+    }
+
+    const queryString = params.toString();
+
+    const response = await fetch(
+        `${API_URL}/products${queryString ? `?${queryString}` : ""}`
+    );
 
     if (!response.ok) {
         throw new Error("Failed to fetch products");
     }
 
-    const  result = await response.json();
+    const result: unknown = await response.json();
 
-    return result.data;
+    if (
+        typeof result !== "object"
+        || result === null
+        || !("data" in result)
+        || !Array.isArray(result.data)
+    ) {
+        throw new Error("Invalid products response from API");
+    }
+
+    return result as ProductsResponse;
 };
 
+// GET product by id
 export const getProductBySlug = async (slug: string) => {
     const response = await fetch(
         `${API_URL}/products/slug/${slug}`
